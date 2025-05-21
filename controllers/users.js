@@ -4,7 +4,6 @@ const getUsers = (req, res) => {
   User.find({})
     .then((users) => {
       if (!users || users.length === 0) {
-        return res.status(404).send({ message: 'No users found' });
       }
       return res.status(200).send(users);
     })
