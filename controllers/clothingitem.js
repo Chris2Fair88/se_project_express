@@ -30,9 +30,6 @@ const deleteItem = (req, res) => {
   ClothingItem.findByIdAndDelete(itemId)
   .orFail()
     .then((item) => {
-      if (!item) {
-        return res.status(ERROR_MESSAGES.NOT_FOUND.status).send({ message: ERROR_MESSAGES.NOT_FOUND.message });
-      }
       return res.status(200).send({ message: 'Item deleted', item });
     })
     .catch((err) => {
