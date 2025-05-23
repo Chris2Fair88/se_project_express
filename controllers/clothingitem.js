@@ -31,7 +31,7 @@ const deleteItem = (req, res) => {
   .orFail()
     .then((item) => {
       if (!item) {
-        return res.status(ERROR_MESSAGES.INTERNAL_SERVER_ERROR.status).send({ message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR.message });
+        return res.status(ERROR_MESSAGES.NOT_FOUND.status).send({ message: ERROR_MESSAGES.NOT_FOUND.message });
       }
       return res.status(200).send({ message: 'Item deleted', item });
     })
@@ -39,6 +39,9 @@ const deleteItem = (req, res) => {
       console.error(err);
       if (err.name === 'CastError') {
         return res.status(ERROR_MESSAGES.BAD_REQUEST.status).send({ message: ERROR_MESSAGES.BAD_REQUEST.message });
+      }
+      if (err.name === 'DocumentNotFoundError') {
+        return res.status(ERROR_MESSAGES.NOT_FOUND.status).send({ message: ERROR_MESSAGES.NOT_FOUND.message });
       }
       return res.status(ERROR_MESSAGES.INTERNAL_SERVER_ERROR.status).send({ message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR.message });
     });
