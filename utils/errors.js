@@ -13,6 +13,10 @@ const ERROR_MESSAGES = {
     status: 500,
     message: 'Internal Server Error',
   },
+  CONFLICT: {
+    status: 409,
+    message: 'Email already exists',
+  },
 };
 
 module.exports = ERROR_MESSAGES;
