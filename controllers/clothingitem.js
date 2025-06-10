@@ -27,16 +27,23 @@ const createItem = (req, res) => {
 
 const deleteItem = (req, res) => {
   const { itemId } = req.params;
-  ClothingItem.findByIdAndDelete(itemId)
-  .orFail()
-    .then((item) => res.status(200).send({ message: 'Item deleted', item }))
+  const userId = req.user._id;
+
+  ClothingItem.findById(itemId)
+    .then((item) => {
+      if (!item) {
+        return res.status(ERROR_MESSAGES.NOT_FOUND.status).send({ message: ERROR_MESSAGES.NOT_FOUND.message });
+      }
+      if (item.owner.toString() !== userId) {
+        return res.status(403).send({ message: 'You can only delete your own items.' });
+      }
+      return ClothingItem.findByIdAndDelete(itemId)
+        .then((deletedItem) => res.status(200).send({ message: 'Item deleted', item: deletedItem }));
+    })
     .catch((err) => {
       console.error(err);
       if (err.name === 'CastError') {
         return res.status(ERROR_MESSAGES.BAD_REQUEST.status).send({ message: ERROR_MESSAGES.BAD_REQUEST.message });
-      }
-      if (err.name === 'DocumentNotFoundError') {
-        return res.status(ERROR_MESSAGES.NOT_FOUND.status).send({ message: ERROR_MESSAGES.NOT_FOUND.message });
       }
       return res.status(ERROR_MESSAGES.INTERNAL_SERVER_ERROR.status).send({ message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR.message });
     });
