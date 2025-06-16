@@ -35,7 +35,7 @@ const deleteItem = (req, res) => {
         return res.status(ERROR_MESSAGES.NOT_FOUND.status).send({ message: ERROR_MESSAGES.NOT_FOUND.message });
       }
       if (item.owner.toString() !== userId) {
-        return res.status(403).send({ message: 'You can only delete your own items.' });
+        return res.status(ERROR_MESSAGES.FORBIDDEN.status).send({ message: ERROR_MESSAGES.FORBIDDEN.message });
       }
       return ClothingItem.findByIdAndDelete(itemId)
         .then((deletedItem) => res.status(200).send({ message: 'Item deleted', item: deletedItem }));

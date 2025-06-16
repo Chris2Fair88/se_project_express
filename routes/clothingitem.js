@@ -1,9 +1,8 @@
 const express = require('express');
-const { getItems, createItem, deleteItem, likeItem, dislikeItem } = require('../controllers/clothingitem');
+const { createItem, deleteItem, likeItem, dislikeItem } = require('../controllers/clothingitem');
 
 const router = express.Router();
 
-router.get('/items', getItems);
 
 
 router.post('/items', createItem);

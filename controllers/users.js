@@ -4,32 +4,6 @@ const { JWT_SECRET } = require('../utils/config');
 const User = require('../models/user');
 const ERROR_MESSAGES = require('../utils/errors');
 
-const getUsers = (req, res) => {
-  User.find({})
-    .then((users) => res.status(200).send(users))
-    .catch((err) => {
-      console.error(err);
-      return res.status(ERROR_MESSAGES.INTERNAL_SERVER_ERROR.status).send({ message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR.message });
-    });
-};
-
-const getUser = (req, res) => {
-  const { userId } = req.params;
-  User.findById(userId)
-    .then((user) => {
-      if (!user) {
-      return res.status(ERROR_MESSAGES.NOT_FOUND.status).send({ message: ERROR_MESSAGES.NOT_FOUND.message });
-      }
-      return res.status(200).send(user);
-    })
-    .catch((err) => {
-      console.error(err);
-      if (err.name === 'CastError') {
-        return res.status(ERROR_MESSAGES.BAD_REQUEST.status).send({ message: ERROR_MESSAGES.BAD_REQUEST.message });
-      }
-      return res.status(ERROR_MESSAGES.INTERNAL_SERVER_ERROR.status).send({ message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR.message });
-    });
-};
 
 
 const createUser = (req, res) => {
@@ -53,17 +27,21 @@ const createUser = (req, res) => {
 const login = (req, res) => {
   const { email, password } = req.body;
 
+  if (!email || !password) {
+    return res.status(ERROR_MESSAGES.BAD_REQUEST.status).send({ message: ERROR_MESSAGES.BAD_REQUEST.message });
+  }
+
   User.findUserByCredentials(email, password)
     .then((user) => {
-
-  const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
-  expiresIn: "7d",
-
-});
-res.send({ token });
-})
-.catch( err => {res.status(ERROR_MESSAGES.UNAUTHORIZED.status).send({ message: ERROR_MESSAGES.UNAUTHORIZED.message });
-});
+      const token = jwt.sign({ _id: user._id }, JWT_SECRET, { expiresIn: "7d" });
+      res.send({ token });
+    })
+    .catch((err) => {
+      if (err.message === "Incorrect email or password") {
+        return res.status(ERROR_MESSAGES.UNAUTHORIZED.status).send({ message: ERROR_MESSAGES.UNAUTHORIZED.message });
+      }
+      return res.status(ERROR_MESSAGES.INTERNAL_SERVER_ERROR.status).send({ message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR.message });
+    });
 };
 
 const getCurrentUser = (req, res) => {
@@ -109,8 +87,6 @@ const updateCurrentUser = (req, res) => {
 };
 
 module.exports = {
-  getUsers,
-  getUser,
   createUser,
   login,
   getCurrentUser,

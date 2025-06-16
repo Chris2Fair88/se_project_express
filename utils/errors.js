@@ -3,6 +3,14 @@ const ERROR_MESSAGES = {
     status: 400,
     message: 'Bad Request',
   },
+  UNAUTHORIZED: {
+    status: 401,
+    message: 'Incorrect email or password',
+  },
+    FORBIDDEN: {
+    status: 403,
+    message: 'You can only delete your own items.',
+  },
 
   NOT_FOUND: {
     status: 404,
