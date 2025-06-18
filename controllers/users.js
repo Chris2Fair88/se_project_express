@@ -9,8 +9,8 @@ const ERROR_MESSAGES = require('../utils/errors');
 const createUser = (req, res) => {
   const { name, avatar, email, password } = req.body;
   bcrypt.hash(password, 10)
-.then(hashedPassword => User.create({ name, avatar, email, password: hashedPassword }))
-    .then((user) => res.status(201).send(user))
+    .then((hashedPassword) => User.create({ name, avatar, email, password: hashedPassword }))
+    .then((user) => res.status(201).send({ name: user.name, avatar: user.avatar, email: user.email }))
     .catch((err) => {
       if (err.code === 11000) {
         return res.status(ERROR_MESSAGES.CONFLICT.status).send({ message: ERROR_MESSAGES.CONFLICT.message });
@@ -19,8 +19,7 @@ const createUser = (req, res) => {
       if (err.name === 'ValidationError') {
         return res.status(ERROR_MESSAGES.BAD_REQUEST.status).send({ message: ERROR_MESSAGES.BAD_REQUEST.message });
       }
-        return res.status(ERROR_MESSAGES.INTERNAL_SERVER_ERROR.status).send({ message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR.message });
-
+      return res.status(ERROR_MESSAGES.INTERNAL_SERVER_ERROR.status).send({ message: ERROR_MESSAGES.INTERNAL_SERVER_ERROR.message });
     });
 };
 
@@ -31,7 +30,7 @@ const login = (req, res) => {
     return res.status(ERROR_MESSAGES.BAD_REQUEST.status).send({ message: ERROR_MESSAGES.BAD_REQUEST.message });
   }
 
-  User.findUserByCredentials(email, password)
+  return User.findUserByCredentials(email, password)
     .then((user) => {
       const token = jwt.sign({ _id: user._id }, JWT_SECRET, { expiresIn: "7d" });
       res.send({ token });

@@ -34,6 +34,7 @@ email: {
 password: {
   type: String,
   required: true,
+  select: false,
 },
 }, {
   versionKey: false,
