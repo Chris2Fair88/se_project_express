@@ -11,7 +11,10 @@ const {
 const getItems = (req, res, next) => {
   ClothingItem.find({})
     .then((items) => res.status(200).send(items))
-    .catch((err) => next(err));
+    .catch((err) => {
+      console.error('Error in getItems:', err);
+      next(err);
+    });
 };
 
 const createItem = (req, res, next) => {

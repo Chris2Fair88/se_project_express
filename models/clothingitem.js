@@ -38,4 +38,4 @@ createdAt: {
 
 },
 );
-module.exports = mongoose.model('clothingitem', clothingItemsSchema);
+module.exports = mongoose.model('ClothingItem', clothingItemsSchema);

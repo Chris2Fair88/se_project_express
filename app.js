@@ -2,40 +2,25 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const routes = require('./routes/index');
-const auth = require('./middlewares/auth');
-const errorHandler = require('./middlewares/errorhandler');
 const { errors } = require('celebrate');
 const { PORT = 3001 } = process.env;
-const { login, createUser } = require('./controllers/users');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
+const errorHandler = require('./middlewares/errorhandler');
 
 const app = express();
 app.use(express.json());
 app.use(cors());
 app.use(requestLogger);
 
+app.post('/signin', require('./controllers/users').login);
+app.post('/signup', require('./controllers/users').createUser);
+app.get('/items', require('./controllers/clothingitem').getItems);
+
+app.use(require('./middlewares/auth'));
+
 app.use(routes);
 
 app.use(errorLogger);
-
-app.post('/signin', login);
-app.post('/signup', createUser);
-
-app.get('/items', require('./controllers/clothingitem').getItems);
-
-app.use(auth);
-
-
-app.use('/', routes);
-
-app.use((err, req, res, next) => {
-  const { statusCode = 500, message } = err;
-  res.status(statusCode).send({
-    message: statusCode === 500 ? 'Internal Server Error' : message,
-  });
-  next();
-});
-
 app.use(errors());
 app.use(errorHandler);
 

@@ -62,8 +62,11 @@ const validateLogin = celebrate({
 // 4. ID validation
 const validateId = celebrate({
   params: Joi.object().keys({
-    itemId: Joi.string().hex().length(24),
-    userId: Joi.string().hex().length(24),
+    _id: Joi.string().length(24).hex().required().messages({
+      "string.empty": 'The "id" field must be filled in',
+      "string.length": 'The "id" field must be 24 characters long',
+      "string.hex": 'The "id" field must be a hexadecimal value',
+    }),
   }),
 });
 
@@ -92,7 +95,7 @@ module.exports = {
   validateCreateClothingItem,
   validateCreateUser,
   validateLogin,
-  validateId,         // for routes with both itemId and userId
-  validateItemId,     // for routes with only itemId
+  validateId,
+  validateItemId,
   validateUpdateUser,
 };
