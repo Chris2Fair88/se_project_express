@@ -67,7 +67,14 @@ const validateId = celebrate({
   }),
 });
 
-// 5. User update validation (for PATCH /users/me)
+// 5. Item ID validation (for item-specific routes)
+const validateItemId = celebrate({
+  params: Joi.object().keys({
+    itemId: Joi.string().hex().length(24).required(),
+  }),
+});
+
+// 6. User update validation (for PATCH /users/me)
 const validateUpdateUser = celebrate({
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30).messages({
@@ -85,6 +92,7 @@ module.exports = {
   validateCreateClothingItem,
   validateCreateUser,
   validateLogin,
-  validateId,
+  validateId,         // for routes with both itemId and userId
+  validateItemId,     // for routes with only itemId
   validateUpdateUser,
 };
