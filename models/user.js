@@ -7,20 +7,19 @@ const userSchema = new mongoose.Schema({
 name: {
     type: String,
     required: true,
-    select: false,
     minlength: 2,
     maxlength: 30,
 },
 avatar: {
   type: String,
-  required: true,
+  required: false,
   validate: {
-     validator(value) {
-    return validator.isURL(value);
+    validator(value) {
+      // Allow empty string or valid URL
+      return value === "" || validator.isURL(value);
+    },
+    message: 'You must enter a valid URL'
   },
-  message: 'You must enter a valid URL'
-  },
-  default: "https://practicum-content.s3.us-west-1.amazonaws.com/avatars/default-avatar.png",
 },
 email: {
   type: String,

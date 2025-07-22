@@ -14,6 +14,7 @@ app.use(requestLogger);
 
 app.post('/signin', require('./controllers/users').login);
 app.post('/signup', require('./controllers/users').createUser);
+app.post('/items', require('./controllers/clothingitem').createItem)
 app.get('/items', require('./controllers/clothingitem').getItems);
 
 app.use(require('./middlewares/auth'));
