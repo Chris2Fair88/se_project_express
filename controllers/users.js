@@ -38,6 +38,7 @@ const login = (req, res, next) => {
     .then((user) => {
       const token = jwt.sign({ _id: user._id }, JWT_SECRET, { expiresIn: "7d" });
       res.send({ token,
+        _id: user._id,
         name: user.name,
         avatar: user.avatar,
         email: user.email
@@ -59,6 +60,7 @@ const getCurrentUser = (req, res, next) => {
         return next(new NotFoundError(ERROR_MESSAGES.NOT_FOUND.message));
       }
       return res.status(200).send({
+        _id: user._id,
         name: user.name,
         avatar: user.avatar,
         email: user.email,
@@ -86,6 +88,7 @@ const updateCurrentUser = (req, res, next) => {
         return next(new NotFoundError(ERROR_MESSAGES.NOT_FOUND.message));
       }
       return res.status(200).send({
+        _id: user._id,
         name: user.name,
         avatar: user.avatar,
         email: user.email,
