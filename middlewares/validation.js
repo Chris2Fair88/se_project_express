@@ -1,7 +1,6 @@
 const { Joi, celebrate } = require('celebrate');
 const validator = require('validator');
 
-// Custom URL validator for Joi
 const validateURL = (value, helpers) => {
   if (validator.isURL(value)) {
     return value;
@@ -9,7 +8,6 @@ const validateURL = (value, helpers) => {
   return helpers.error('string.uri');
 };
 
-// 1. Clothing item body validation
 const validateCreateClothingItem = celebrate({
   body: Joi.object().keys({
     name: Joi.string().required().min(2).max(30).messages({
@@ -25,7 +23,6 @@ const validateCreateClothingItem = celebrate({
   }),
 });
 
-// 2. User creation validation
 const validateCreateUser = celebrate({
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30).messages({
@@ -46,7 +43,6 @@ const validateCreateUser = celebrate({
   }),
 });
 
-// 3. Login validation
 const validateLogin = celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email().messages({
@@ -59,7 +55,6 @@ const validateLogin = celebrate({
   }),
 });
 
-// 4. ID validation
 const validateId = celebrate({
   params: Joi.object().keys({
     _id: Joi.string().length(24).hex().required().messages({
@@ -70,14 +65,12 @@ const validateId = celebrate({
   }),
 });
 
-// 5. Item ID validation (for item-specific routes)
 const validateItemId = celebrate({
   params: Joi.object().keys({
     itemId: Joi.string().hex().length(24).required(),
   }),
 });
 
-// 6. User update validation (for PATCH /users/me)
 const validateUpdateUser = celebrate({
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30).messages({

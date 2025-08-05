@@ -13,6 +13,12 @@ app.use(express.json());
 app.use(cors());
 app.use(requestLogger);
 
+app.get('/crash-test', () => {
+  setTimeout(() => {
+    throw new Error('Server will crash now');
+  }, 0);
+});
+
 app.post('/signin', require('./controllers/users').login);
 app.post('/signup', require('./controllers/users').createUser);
 app.get('/items', require('./controllers/clothingitem').getItems);
