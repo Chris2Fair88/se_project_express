@@ -7,6 +7,7 @@ const { errors } = require('celebrate');
 const { PORT = 3001 } = process.env;
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const errorHandler = require('./middlewares/errorhandler');
+const { validateCreateUser, validateLogin } = require('./middlewares/validation');
 
 const app = express();
 app.use(express.json());
@@ -19,8 +20,8 @@ app.get('/crash-test', () => {
   }, 0);
 });
 
-app.post('/signin', require('./controllers/users').login);
-app.post('/signup', require('./controllers/users').createUser);
+app.post('/signin', validateLogin, require('./controllers/users').login);
+app.post('/signup', validateCreateUser, require('./controllers/users').createUser);
 app.get('/items', require('./controllers/clothingitem').getItems);
 
 app.use(require('./middlewares/auth'));

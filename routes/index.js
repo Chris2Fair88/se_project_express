@@ -4,13 +4,13 @@ const router = express.Router();
 const userRouter = require('./users');
 const clothingItemsRouter = require('./clothingitem');
 
-const { NOT_FOUND } = require('../utils/errors');
+const { NotFoundError } = require('../utils/errors');
 
 router.use('/', clothingItemsRouter);
 router.use('/', userRouter);
 
-router.use((req, res) => {
-  res.status(NOT_FOUND.status).send({ message: NOT_FOUND.message });
+router.use((req, res, next) => {
+  next(new NotFoundError('Route not found'));
 });
 
 module.exports = router;

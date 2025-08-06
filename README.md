@@ -21,9 +21,15 @@ This project is the back-end server for the WTWR (What to Wear?) application. It
 - **RESTful API design** principles
 - **Nodemon** for development with hot reload
 
+## Links
+
+- [Live Backend API](https://api.wtwr.homeonthewater.com)
+- [Frontend Application](https://wtwr.homeonthewater.com)
+- [Frontend Repository](https://github.com/Chris2Fair88/se_project_react)
+
 ## Running the Project
 
-`npm run start` — to launch the server  
+`npm run start` — to launch the server
 `npm run dev` — to launch the server with the hot reload feature
 
 ### Testing
