@@ -1,10 +1,8 @@
 const ClothingItem = require('../models/clothingitem');
 const {
   BadRequestError,
-  UnauthorizedError,
   ForbiddenError,
   NotFoundError,
-  ConflictError,
   ERROR_MESSAGES,
 } = require('../utils/errors');
 
